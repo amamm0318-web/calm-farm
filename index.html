@@ -190,7 +190,8 @@ body:has(#tb:not([hidden])) #hubbtn,body:has(#tb:not([hidden])) #harvbtn{display
 <style>
 /* منع «السحب للتحديث» وارتداد الصفحة */
 html{height:100%;overflow:hidden;overscroll-behavior:none}
-body{position:fixed;inset:0;width:100%;overscroll-behavior:none}
+body{position:static;height:auto;min-height:calc(100% + 2px);overscroll-behavior:none}
+html::-webkit-scrollbar{display:none}
 </style>
 <style>#fish{position:fixed;inset:0;z-index:70;background:#000a;display:flex;align-items:center;justify-content:center;padding:10px}#fish[hidden]{display:none}.fbox{background:var(--paper,#fff4d6);border:4px solid var(--wood,#7a4a1e);border-radius:18px;width:100%;max-width:420px;padding:10px;color:var(--ink,#3a2410);text-align:center}.fh{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:18px}.fh button{border:0;border-radius:10px;background:var(--wood,#7a4a1e);color:#fff;font-size:18px;padding:6px 12px}.fsc{position:relative;margin:8px auto}.fsc img{width:100%;display:block}#fbob{position:absolute;left:46%;top:44%;font-size:26px;transition:transform .3s}#fbob.w{animation:fbw 1.2s ease-in-out infinite}#fbob.b{animation:fbb .18s linear infinite}@keyframes fbw{50%{transform:translateY(5px)}}@keyframes fbb{50%{transform:translate(4px,12px) scale(1.2)}}#fmsg{min-height:26px;font-weight:700;font-size:16px;margin:4px 0}#fbtn{width:100%;font-size:18px;padding:12px}#fres{margin-top:8px;font-size:13px;min-height:34px}#fres b{font-size:30px;display:block}</style></head>
 <body>
@@ -1386,6 +1387,8 @@ const canScroll=el=>{for(;el&&el!==document.body;el=el.parentElement){const c=ge
   if((ox==='auto'||ox==='scroll')&&el.scrollWidth>el.clientWidth+1)return true}return false};
 document.addEventListener('touchmove',e=>{if(e.touches.length>1)return;if(!canScroll(e.target))e.preventDefault()},{passive:false});
 document.addEventListener('gesturestart',e=>e.preventDefault());
+/* بكسل واحد غير مرئي: يجعل التطبيق يظن أن الصفحة قابلة للتمرير للأعلى فلا يطلق «السحب للتحديث» */
+const nudge=()=>{if((window.scrollY||0)<1)window.scrollTo(0,1)};nudge();addEventListener('scroll',nudge);addEventListener('resize',nudge);addEventListener('load',nudge);document.addEventListener('visibilitychange',nudge);setInterval(nudge,1000);
 })();
 </script>
 </body>
